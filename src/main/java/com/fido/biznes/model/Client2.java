@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Client {
+public class Client2 {
     private Long id;
     private String card_holder;
     private String card_number;

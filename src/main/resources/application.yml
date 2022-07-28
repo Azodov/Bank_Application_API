@@ -1,6 +1,13 @@
-server.port: 8082
-spring.datasource.url: jdbc:postgresql://localhost:5432/bank_devops
-spring.datasource.username: bank_devops
-spring.datasource.password: admin123
-spring.datasource.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQL92Dialect
-        ddl-auto: update
+server:
+  port: 8082
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bank_devops
+    username: bank_devops
+    password: admin123
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL92Dialect
+    hibernate:
+      ddl-auto: update
