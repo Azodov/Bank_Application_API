@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public class ClientService {
-    private ClientsRepository clientsRepository;
+    private final ClientsRepository clientsRepository;
     public ClientService(ClientsRepository clientsRepository) {
         this.clientsRepository = clientsRepository;
     }
@@ -20,4 +20,9 @@ public class ClientService {
     public List<Client> findAll() {
         return clientsRepository.findAll();
     }
+
+    public Client findById(Long id) {
+        return clientsRepository.findById(id).orElse(null);
+    }
+
 }
