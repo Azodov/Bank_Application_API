@@ -25,4 +25,9 @@ public class ClientService {
         return clientsRepository.findById(id).orElse(null);
     }
 
+    public void delete(Long id) {
+        clientsRepository.deleteById(id);
+    }
+
+
 }

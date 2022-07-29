@@ -27,28 +27,49 @@ public class ClientResource {
         Calendar calendar = new GregorianCalendar();
         CardNumberGenerator cardNumberGenerator = new CardNumberGenerator();
         GetCalendar getCalendar = new GetCalendar();
-        if (client.getCard_type().equals("UZCARD")){
-            client.setCard_currency("UZS");
-            calendar.add(Calendar.YEAR, 5);
-            client.setCard_number(cardNumberGenerator.generate("8600", 16));
-            client.setCard_expiration_date(calendar.getTime().toString());
-        } else if (client.getCard_type().equals("VISA")) {
-            client.setCard_currency("USD");
-            client.setCard_number(cardNumberGenerator.generate("4231", 16));
-            calendar.add(Calendar.YEAR, 3);
-            client.setCard_expiration_date(calendar.getTime().toString());
-        }else if (client.getCard_type().equals("HUMO")) {
-            client.setCard_currency("UZS");
-            client.setCard_number(cardNumberGenerator.generate("9860", 16));
-            calendar.add(Calendar.YEAR, 5);
-            client.setCard_expiration_date(calendar.getTime().toString());
+        boolean check_status = false;
+        switch (client.getCard_type()) {
+            case "UZCARD":
+                try {
+                    client.setCard_currency("UZS");
+                    calendar.add(Calendar.YEAR, 5);
+                    client.setCard_number(cardNumberGenerator.generate("8600", 16));
+                    client.setCard_expiration_date(calendar.getTime().toString());
+                    check_status = true;
+                } catch (Exception e) {
+                    ResponseEntity.badRequest().body("Error");
+                }
+                break;
+            case "VISA":
+                try {
+                    client.setCard_currency("USD");
+                    client.setCard_number(cardNumberGenerator.generate("4231", 16));
+                    calendar.add(Calendar.YEAR, 3);
+                    client.setCard_expiration_date(calendar.getTime().toString());
+                    check_status = true;
+                } catch (Exception e) {
+                    ResponseEntity.badRequest().body("Error");
+                }
+                break;
+            case "HUMO":
+                try {
+                    client.setCard_currency("UZS");
+                    client.setCard_number(cardNumberGenerator.generate("9860", 16));
+                    calendar.add(Calendar.YEAR, 5);
+                    client.setCard_expiration_date(calendar.getTime().toString());
+                    check_status = true;
+                } catch (Exception e){
+                    ResponseEntity.badRequest().body("Error");
+                }
+                break;
         }
+
         client.setCard_status(true);
         client.setCard_billing_time_zone(calendar.getTimeZone().toZoneId().getId());
         client.setCard_created_date(getCalendar.getCurrentDate());
         client.setCard_balance("0");
-        Client clients = clientService.save(client);
-        return ResponseEntity.ok(clients);
+        clientService.save(client);
+        return ResponseEntity.ok(client);
     }
 
     @GetMapping("/clients")
@@ -62,4 +83,12 @@ public class ClientResource {
         Client client = clientService.findById(id);
         return ResponseEntity.ok(client);
     }
+
+    @DeleteMapping("/clients/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        clientService.delete(id);
+        return ResponseEntity.ok(true);
+    }
+
+
 }
