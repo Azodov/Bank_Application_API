@@ -29,5 +29,12 @@ public class ClientService {
         clientsRepository.deleteById(id);
     }
 
+    public List<Client> findByLastCardNumber(String cardNumber) {
+        return clientsRepository.findByLastCardNumber(cardNumber);
+    }
+
+    public List<Client> findByCardExpirationDate(String card_expiration_date) {
+        return clientsRepository.findByCardExpirationDate(card_expiration_date);
+    }
 
 }

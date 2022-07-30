@@ -16,7 +16,6 @@ import java.util.List;
 public class ClientResource {
 
     private final ClientService clientService;
-
     public ClientResource(ClientService clientService) {
         this.clientService = clientService;
     }
@@ -86,8 +85,45 @@ public class ClientResource {
 
     @DeleteMapping("/clients/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
-        clientService.delete(id);
-        return ResponseEntity.ok(true);
+        try {
+            Client client = clientService.findById(id);
+            clientService.delete(id);
+            return ResponseEntity.ok(client.getCard_holder() + " ma'lumotlari butunlay o'chirildi.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error");
+        }
+    }
+
+    @GetMapping("/clients/search")
+    public ResponseEntity search(@RequestParam String card_number) {
+        List<Client> clients = clientService.findByLastCardNumber(card_number);
+        return ResponseEntity.ok(clients);
+    }
+
+    @PutMapping("/clients/{id}")
+    public ResponseEntity update(@PathVariable Long id, @RequestBody Client client) {
+        try {
+            Client client1 = clientService.findById(id);
+            if (client.getCard_status() != null){
+                client1.setCard_status(client.getCard_status());
+            }
+            if (client.getCard_pin() != null){
+                client1.setCard_pin(client.getCard_pin());
+            }
+            if (client.getCard_balance() != null){
+                client1.setCard_balance(client.getCard_balance());
+            }
+            if (client.getCard_billing_phone() != null){
+                client1.setCard_billing_phone(client.getCard_billing_phone());
+            }
+            if (client.getCard_balance() != null){
+                client1.setCard_balance(client.getCard_balance());
+            }
+            clientService.save(client1);
+            return ResponseEntity.ok(client1);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error");
+        }
     }
 
 
